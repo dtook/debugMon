@@ -7,30 +7,36 @@ public class DebugMon
     //so if I pass an array it sends it to teh array instead of the int method.
 
     //method needs to take an unknown variable of any type or generate a method for each variable type to be debugged
+    **Add bool switch 1 or 0 to main method entry point for class if 1 go ahead if 2 ignore
     public void ValVariable(object value)
     {
-        //what type is the variable
-        if (value is string)
+        if (value != null)
         {
-            //if value.GetType() = 
-            //if string or array of strings then do
-
-            DebugString(value);
-
-            //DebugArray(value);
-
-
-        }
-        else if (value is int)
-        {
-            Console.WriteLine("## Debug value Integer ## Echo Value: " + value);
+            Console.WriteLine("Nothing to do here program will exit.");
+            Console.ReadKey();
         }
         else
         {
-            Console.WriteLine(".");
-        }
+            //what type is the variable
+            if (value is string)
+            {
+                //if value.GetType() = 
+                //if string or array of strings then do
 
-        //dependent on select case call the right method for it
+                DebugString(value);
+
+                //DebugArray(value);
+
+            }
+            else if (value is int)
+            {
+                Console.WriteLine("## Debug value Integer ## Echo Value: " + value);
+            }
+            else
+            {
+                Console.WriteLine(".");
+            }
+        }
     }
 
     private void DebugArray(object value)
