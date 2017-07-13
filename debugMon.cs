@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using System.Xml;
 
 public class DebugMon
@@ -11,36 +14,30 @@ public class DebugMon
     //**Add bool switch 1 or 0 to main method entry point for class if 1 go ahead if 2 ignore
     public bool TurnOnDebug()
     {
-        bool debugOnOff = null;
-        Console.WriteLine("bool should be nulls " + debugOnOff);
+        bool debugOnOff = false;
+        //Console.WriteLine("bool should be false " + debugOnOff);
+        //get xml file as per debug folder for build
+        string xmlFile = File.ReadAllText(@"Config.xml");
 
-        //code from https://support.microsoft.com/en-gb/help/307548/
-        XmlTextReader reader = new XmlTextReader("Config.xml");
+        //assign that file to teh xmldoc constructor
+        XmlDocument xmldoc = new XmlDocument();
+        xmldoc.LoadXml(xmlFile);
+        XmlNodeList nodeList = xmldoc.GetElementsByTagName("debugSwitch");
 
-        while (reader.Read())
+        //go throguh all nodes find debugSwitch and assign as relevant
+        foreach (XmlNode node in nodeList)
         {
-            switch (reader.NodeType)
+            if (node.InnerText == "false")
             {
-                case XmlNodeType.Element: // The node is an element.
-                    Console.Write("<" + reader.Name);
-
-                    while (reader.MoveToNextAttribute()) // Read the attributes.
-                        Console.Write(" " + reader.Name + "='" + reader.Value + "'");
-                    Console.WriteLine(">");
-                    break;
-                case XmlNodeType.Text: //Display the text in each element.
-                    Console.WriteLine(reader.Value);
-                    break;
-                case XmlNodeType.EndElement: //Display the end of the element.
-                    Console.Write("</" + reader.Name);
-                    Console.WriteLine(">");
-                    break;
+                debugOnOff = false;
+            }
+            else if (node.InnerText == "true")
+            {
+                debugOnOff = true;
             }
         }
 
-        debugOnOff = false;
-        Console.WriteLine("bool should be false " + debugOnOff);
-
+        //return the debug switch as bool
         return debugOnOff;
     }
 
@@ -83,7 +80,7 @@ public class DebugMon
                     Console.WriteLine(".");
                 }
             }
-    }
+        }
 
     }
 
